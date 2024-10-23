@@ -2,7 +2,7 @@ package fstr
 
 /*
 Map allows input of a format string incorporating a string interpolation
-syntax where the interpolation signaller is a key enclosed in curly braces
+syntax where the interpolation signaller is a key enclosed in braces
 (example: "Hello, {name}."). Values to interpolate to the input string may then
 be provided via map arg `vs`.
 
@@ -31,54 +31,54 @@ func Map(v string, vs map[string]string) string {
 	pos := -1
 
 	// Loop until we hit the end of the line.
-outer:
-	for pos < len(runes)-1 {
-		// Lookahead one rune.
-		r := runes[pos+1]
+	for pos < len(v)-1 {
+		// Lookahead one byte.
+		r := v[pos+1]
 
+		switch r {
 		// If we find a backslash and the next character is an open brace - skip
 		// string interpolation for this token (escaped).
-		if r == '\\' {
-			if pos+2 < len(runes) {
-				if runes[pos+2] == '{' {
-					pos++                     // current : '\'
-					pos++                     // current : '{'
-					out.WriteRune(runes[pos]) // write   : '{'
+		case '\\':
+			if pos+2 < len(v) {
+				if v[pos+2] == '{' {
+					pos++                       // current : '\'
+					pos++                       // current : '{'
 					out = out.writeByte(v[pos]) // write   : '{'
 					continue
 				}
 			}
-		}
 
 		// If we found an opening brace and it's not escaped, consume it as an
 		// interpolation token.
-		if r == '{' {
+		case '{':
 			pos++ // current: {
 
 			// Find the closing brace position.
 			start := pos + 1
-			for runes[pos+1] != '}' {
+			for v[pos+1] != '}' {
 				pos++
 			}
 
 			// Take the start + end+1 positions as the interpolation token slice range.
-			token := string(runes[start : pos+1])
+			token := string(v[start : pos+1])
+
+			// Look for a hit in our interpolation map.
+			if value, ok := vs[token]; ok {
+				// If we find one, write its value and continue on to avoid the raw
+				// token getting written back out.
+				out = out.writeString(value)
+
+			} else {
+				// If we find no matching interpolation token, simply write the token out.
+				for i := start; i < pos+1; i++ {
+					out = out.writeByte(v[i])
+				}
+			}
 
 			pos++ // }
 
-			// Look for a hit in our interpolation map.
-			if v, ok := vs[token]; ok {
-				// If we find one, write its value and continue on to avoid the raw
-				// token getting written back out.
-				out.WriteString(v)
-				continue outer
-				out = out.writeString(value)
-					out = out.writeByte(v[i])
-			}
-
-			// If we find no matching interpolation token, simply write the token out.
-		} else {
-			// Just a normal rune, write it to the buffer.
+		default:
+			// Just a normal byte, write it to the buffer.
 			pos++
 			out = out.writeByte(v[pos])
 		}
