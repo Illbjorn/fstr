@@ -80,14 +80,26 @@ func main() {
 
 It's pretty quick!
 
+**Linux**
 ```
 goos: linux
 goarch: amd64
 pkg: github.com/illbjorn/fstr
 cpu: AMD Ryzen 9 5900X 12-Core Processor
-BenchmarkMap-24      6146001  192.7 ns/op  184 B/op  5 allocs/op
-BenchmarkSprintf-24  3891292  310.2 ns/op  168 B/op  5 allocs/op
-BenchmarkPairs-24    7371318  160.5 ns/op  168 B/op  5 allocs/op
+BenchmarkMap-24      6072363  192.5 ns/op  184 B/op  5 allocs/op
+BenchmarkSprintf-24  3867870  322.8 ns/op  168 B/op  5 allocs/op
+BenchmarkPairs-24    7552734  161.0 ns/op  168 B/op  5 allocs/op
+```
+
+**Windows**
+```
+goos: windows
+goarch: amd64
+pkg: github.com/illbjorn/fstr
+cpu: AMD Ryzen 9 5900X 12-Core Processor
+BenchmarkMap-24      5504944  215.3 ns/op  184 B/op  5 allocs/op
+BenchmarkSprintf-24  3808503  316.5 ns/op  168 B/op  5 allocs/op
+BenchmarkPairs-24    6191988  190.6 ns/op  168 B/op  5 allocs/op
 ```
 
 This benchmark tests:
