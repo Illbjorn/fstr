@@ -21,6 +21,11 @@ Example:
 	fmt.Println(v) // Hello, John and Bill!
 */
 func Pairs(v string, vs ...string) string {
+	// If we have no pairs to interpolate, just return the input.
+	if len(vs) == 0 {
+		return v
+	}
+
 	// Convert input string to runes.
 	runes := []rune(v)
 
@@ -67,9 +72,14 @@ outer:
 			pos++ // }
 
 			// Look for a hit in our interpolation pairs. The pairs are laid out in
-			// twos as `"token", value` so we step by 2.
+			// twos as `"token", "value"`, so we step by 2.
 			for i := 0; i < len(vs); i += 2 {
-				if vs[i] == token {
+				// Make sure we're not indexing outside the bounds of the input array.
+				if i >= len(vs) || i+1 >= len(vs) {
+					break
+				}
+
+				if i+1 < len(vs) && vs[i] == token {
 					// If we find one, write its corresponding (pos+1) value and continue
 					// on to avoid the raw token getting written back out.
 					out.WriteString(vs[i+1])
@@ -78,6 +88,8 @@ outer:
 			}
 
 			// If we find no matching interpolation token, simply write the token out.
+			// Ex: if we find `{value}` in the input but no `value` key in the pairs,
+			// we would output `value`.
 			out.WriteString(token)
 		} else {
 			// Just a normal rune, write it to the buffer.
