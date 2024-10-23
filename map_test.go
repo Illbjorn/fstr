@@ -70,10 +70,10 @@ func TestMap(t *testing.T) {
 
 var (
 	// Benchmark Map Template
-	benchMapInput  = "The {val1} brown {val2} jumped over the lazy {val3}."
+	benchMapInput  = "The {val1} brown {val2} jumped over the lazy {val3} {val4}."
 	benchMapValues = map[string]string{"val1": "quick", "val2": "fox", "val3": "dog"}
 	// Benchmark Sprintf Template
-	benchSprintfInput  = "The %s brown %s jumped over the lazy %s."
+	benchSprintfInput  = "The %s brown %s jumped over the lazy %s %s."
 	benchSprintfValues = []string{"quick", "fox", "dog"}
 )
 
