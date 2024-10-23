@@ -83,7 +83,7 @@ func TestPairs(t *testing.T) {
 
 var (
 	// Benchmark Pairs Template
-	benchPairsInput  = `The {val1} brown {val2} jumped over the lazy {val3}.`
+	benchPairsInput  = "The {val1} brown {val2} jumped over the lazy {val3}."
 	benchPairsValues = []string{"val1", "quick", "val2", "fox", "val3", "dog"}
 )
 
