@@ -1,7 +1,5 @@
 package fstr
 
-import "bytes"
-
 /*
 Map allows input of a format string incorporating a string interpolation
 syntax where the interpolation signaller is a key enclosed in curly braces
@@ -25,11 +23,8 @@ func Map(v string, vs map[string]string) string {
 		return v
 	}
 
-	// Convert input string to runes.
-	runes := []rune(v)
-
 	// Initialize the buffer to write the resulting string to.
-	out := bytes.NewBuffer(nil)
+	out := buffer{}
 
 	// Track input string position.
 	// We always look ahead so we start from -1.
@@ -49,6 +44,7 @@ outer:
 					pos++                     // current : '\'
 					pos++                     // current : '{'
 					out.WriteRune(runes[pos]) // write   : '{'
+					out = out.writeByte(v[pos]) // write   : '{'
 					continue
 				}
 			}
@@ -76,16 +72,17 @@ outer:
 				// token getting written back out.
 				out.WriteString(v)
 				continue outer
+				out = out.writeString(value)
+					out = out.writeByte(v[i])
 			}
 
 			// If we find no matching interpolation token, simply write the token out.
-			out.WriteString(token)
 		} else {
 			// Just a normal rune, write it to the buffer.
 			pos++
-			out.WriteRune(runes[pos])
+			out = out.writeByte(v[pos])
 		}
 	}
 
-	return out.String()
+	return string(out)
 }

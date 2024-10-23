@@ -1,9 +1,5 @@
 package fstr
 
-import (
-	"bytes"
-)
-
 /*
 Pairs allows input of a format string incorporating a string interpolation
 syntax where the interpolation signaller is a key enclosed in curly braces
@@ -26,11 +22,8 @@ func Pairs(v string, vs ...string) string {
 		return v
 	}
 
-	// Convert input string to runes.
-	runes := []rune(v)
-
 	// Initialize the buffer to write the resulting string to.
-	out := bytes.NewBuffer(nil)
+	out := buffer{}
 
 	// Track input string position.
 	// We always look ahead so we start from -1.
@@ -49,7 +42,7 @@ outer:
 				if runes[pos+2] == '{' {
 					pos++                     // current : '\'
 					pos++                     // current : '{'
-					out.WriteRune(runes[pos]) // write   : '{'
+					out = out.writeByte(v[pos]) // write   : '{'
 					continue
 				}
 			}
@@ -82,7 +75,8 @@ outer:
 				if i+1 < len(vs) && vs[i] == token {
 					// If we find one, write its corresponding (pos+1) value and continue
 					// on to avoid the raw token getting written back out.
-					out.WriteString(vs[i+1])
+					out = out.writeString(vs[i+1])
+					pos++ // current: }
 					continue outer
 				}
 			}
@@ -90,13 +84,13 @@ outer:
 			// If we find no matching interpolation token, simply write the token out.
 			// Ex: if we find `{value}` in the input but no `value` key in the pairs,
 			// we would output `value`.
-			out.WriteString(token)
 		} else {
 			// Just a normal rune, write it to the buffer.
+				out = out.writeByte(v[i])
 			pos++
-			out.WriteRune(runes[pos])
+			out = out.writeByte(v[pos])
 		}
 	}
 
-	return out.String()
+	return string(out)
 }
