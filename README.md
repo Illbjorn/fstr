@@ -78,18 +78,16 @@ func main() {
 
 # Performance
 
-For the purpose of this string formatting, I don't know it will be super
-attainable to be equivalent or faster than `fmt.Sprintf`. But, `fstr` is not
-terribly far behind:
+It's pretty quick!
 
 ```
-goos: windows
+goos: linux
 goarch: amd64
 pkg: github.com/illbjorn/fstr
 cpu: AMD Ryzen 9 5900X 12-Core Processor
-BenchmarkMap-24        	 3386107	       373.7 ns/op	     320 B/op	       3 allocs/op
-BenchmarkSprintf-24    	 3468406	       338.8 ns/op	     152 B/op	       5 allocs/op
-BenchmarkPairs-24      	 3430071	       350.5 ns/op	     320 B/op	       3 allocs/op
+BenchmarkMap-24      6146001  192.7 ns/op  184 B/op  5 allocs/op
+BenchmarkSprintf-24  3891292  310.2 ns/op  168 B/op  5 allocs/op
+BenchmarkPairs-24    7371318  160.5 ns/op  168 B/op  5 allocs/op
 ```
 
 This benchmark tests:
