@@ -9,26 +9,26 @@ import (
 
 var (
 	// Good Value 1
-	// Just test basic string interpolation.
+	// Just test basic string interpolation
 	mapInput1  = "The {val1} brown fox {val2} over the lazy {val3}."
 	mapValues1 = map[string]string{"val1": "quick", "val2": "jumped", "val3": "dog"}
 	mapOutput1 = "The quick brown fox jumped over the lazy dog."
 
 	// Good Value 2
-	// Testing interpolation token escaping.
+	// Testing interpolation token escaping
 	mapInput2  = `The \{quick} brown fox \{jumped} over the lazy \{dog}.`
 	mapValues2 = map[string]string{"quick": "fast", "jumped": "leaped", "dog": "bear"}
 	mapOutput2 = "The {quick} brown fox {jumped} over the lazy {dog}."
 
 	// Good Value 3
 	// Interpolation token present for which there is no `pair` value to replace
-	// it with.
+	// it with
 	mapInput3  = "The {quick} brown fox {jumped} over the lazy {dog}."
 	mapValues3 = map[string]string{"quick": "fast", "jumped": "leaped"}
 	mapOutput3 = "The fast brown fox leaped over the lazy dog."
 
 	// Good Value 4
-	// Tests the early return (no values to interpolate) code path.
+	// Tests the early return (no values to interpolate) code path
 	mapInput4  = "The {quick} brown fox {jumped} over the lazy {dog}."
 	mapValues4 = map[string]string{}
 	mapOutput4 = "The {quick} brown fox {jumped} over the lazy {dog}."

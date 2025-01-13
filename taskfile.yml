@@ -9,18 +9,18 @@ tasks:
     prerequisites:
       - &needs-go
         sh: 'which go'
-        msg: Go must be installed to invoke this task.
+        msg: Go must be installed to invoke this task
 
   test:
     aliases: [t]
     prerequisites:
       - <<: *needs-go
-    desc: Executes all Go tests.
+    desc: Executes all Go tests
     cmd: go test -timeout 30s github.com/illbjorn/fstr
 
   bench:
     aliases: [be]
     prerequisites:
       - <<: *needs-go
-    desc: Executes all Go benchmarks.
+    desc: Executes all Go benchmarks
     cmd: go test -benchmem -run=^$ -bench . github.com/illbjorn/fstr
